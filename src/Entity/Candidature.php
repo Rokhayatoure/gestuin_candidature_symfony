@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\CandidatureRepository;
+
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CandidatureRepository;
 
 #[ORM\Entity(repositoryClass: CandidatureRepository::class)]
 class Candidature
@@ -12,15 +14,16 @@ class Candidature
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[ORM\Column(type: Types::STRING,length: 50)]
+private string $status="ACCEPTER"; 
+    #[ORM\ManyToOne(inversedBy: 'candidatures')]
+    private ?Formation $formation = null;
+
+    // #[ORM\Column(length: 255)]
+    // private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidatures')]
-    private ?Formation $Formation = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
-
-    #[ORM\ManyToOne(inversedBy: 'candidatures')]
-    private ?User $User = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -29,12 +32,12 @@ class Candidature
 
     public function getFormation(): ?Formation
     {
-        return $this->Formation;
+        return $this->formation;
     }
 
     public function setFormation(?Formation $Formation): static
     {
-        $this->Formation = $Formation;
+        $this->formation = $Formation;
 
         return $this;
     }
@@ -53,12 +56,12 @@ class Candidature
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
     public function setUser(?User $User): static
     {
-        $this->User = $User;
+        $this->user = $User;
 
         return $this;
     }
